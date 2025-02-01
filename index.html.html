@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>‘«  «· Ì„</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #chat-box { width: 80%; max-width: 400px; height: 300px; border: 1px solid #ccc; overflow-y: auto; margin: 20px auto; padding: 10px; background: #f9f9f9; }
+        #message-input { width: 70%; padding: 10px; margin-top: 5px; }
+        #send-btn { padding: 10px; cursor: pointer; }
+        .message { text-align: left; background: #e3e3e3; padding: 5px; border-radius: 5px; margin: 5px; position: relative; }
+        .username { font-weight: bold; color: #007bff; }
+        .owner { color: #ffcc00; font-weight: bold; }
+        .kick-btn { position: absolute; right: 5px; top: 5px; background: red; color: white; border: none; padding: 3px; cursor: pointer; font-size: 10px; display: none; }
+        .kick-btn.show { display: inline; }
+    </style>
+</head>
+<body>
+    <h2>‘«  «· Ì„</h2>
+    <input type="text" id="username-input" placeholder="√œŒ· «”„ «·„” Œœ„...">
+    <button id="set-username-btn"> √ﬂÌœ «·«”„</button>
+    <div id="chat-box"></div>
+    <input type="text" id="message-input" placeholder="«ﬂ » —”«·…..." disabled>
+    <button id="send-btn" disabled>≈—”«·</button>
+
+    <script>
+        const chatBox = document.getElementById("chat-box");
+        const messageInput = document.getElementById("message-input");
+        const usernameInput = document.getElementById("username-input");
+        const sendBtn = document.getElementById("send-btn");
+        const setUsernameBtn = document.getElementById("set-username-btn");
+        
+        let username = "";
+
+        setUsernameBtn.addEventListener("click", function() {
+            if (usernameInput.value.trim() !== "") {
+                username = usernameInput.value.trim();
+                usernameInput.disabled = true;
+                setUsernameBtn.disabled = true;
+                messageInput.disabled = false;
+                sendBtn.disabled = false;
+            }
+        });
+
+        sendBtn.addEventListener("click", function() {
+            const messageText = messageInput.value.trim();
+            if (messageText === "") return;
+            
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message");
+            
+            let usernameClass = "username";
+            let usernameDisplay = username;
+            
+            // ≈–« ﬂ«‰ «·„” Œœ„ ÂÊ "Owner"° Ì „ ≈÷«›… «·‰’ "(Owner)" ≈·Ï «”„Â
+            if (username.toLowerCase() === "owner") {
+                usernameClass += " owner";
+                usernameDisplay += " (Owner)"; // ≈÷«›… (Owner) ≈·Ï «”„ «·„” Œœ„
+            }
+            
+            messageElement.innerHTML = `<span class='${usernameClass}'>${usernameDisplay}:</span> ${messageText}`;
+            
+            if (username.toLowerCase() === "owner") {
+                const kickBtn = document.createElement("button");
+                kickBtn.innerText = "ÿ—œ";
+                kickBtn.classList.add("kick-btn");
+                kickBtn.addEventListener("click", function() {
+                    // ÿ—œ «·„” Œœ„ Ê≈“«·… «·—”«·…
+                    messageElement.remove();
+                });
+                messageElement.appendChild(kickBtn);
+                kickBtn.classList.add("show");
+            }
+            
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            messageInput.value = "";
+        });
+    </script>
+</body>
+</html>
